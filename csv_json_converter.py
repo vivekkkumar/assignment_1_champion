@@ -1,5 +1,5 @@
 def check_empty(x):
-    return when(col(x) != "", col(x)).otherwise("Null")
+    return when(col(x) != "", col(x)).otherwise(None)
 
 
 def csv_to_json(input_filename, output_filename):
@@ -12,15 +12,15 @@ def csv_to_json(input_filename, output_filename):
 
 	spark = SparkSession\
 	        .builder\
-	        .appName("Write parquet")\
+	        .appName("Write json")\
 	        .master("local[*]")\
 	        .getOrCreate()
 
 	test_schema = StructType([
-    StructField("Person Id", IntegerType(), True),
-    StructField("Floor Access", DateType(), True),
-    StructField("Floor Level", IntegerType(), True),
-    StructField("Building", StringType(), True)    
+    	StructField("Person Id", IntegerType(), True),
+    	StructField("Floor Access", DateType(), True),
+    	StructField("Floor Level", IntegerType(), True),
+    	StructField("Building", StringType(), True)    
 	])
 
 	csv_df = spark.read.option("header", "true").schema(test_schema).csv(input_filename)
@@ -28,7 +28,7 @@ def csv_to_json(input_filename, output_filename):
 	# cleaning the data and input proper null value to clean the dataset 
 	# will be useful in later point of time by chaning the type to Null, like counting the Null.
 
-	nan_cleaned_df = csv_df.select([when(isnan(c), c).otherwise("Null").alias(c) for c in csv_df.columns]).show()
+	nan_cleaned_df = csv_df.select([when(isnan(c), c).otherwise(None).alias(c) for c in csv_df.columns]).show()
 
 	expression = [check_empty(x).alias(x) for x in csv_df.columns]
 
