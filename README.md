@@ -1,7 +1,13 @@
 # assignment_1_champion
 Assignment
 
-To run the python file. Please run.
+To run the python file.
+
+Pyspark is a pre requisite.
+
+Run below command
+#pip instal pyspark
+after installation
 
 csv_json_converter.py input_filename, output_filename
 
